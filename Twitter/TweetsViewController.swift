@@ -11,7 +11,7 @@ import UIKit
 class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var tweets : [Tweet]!
-    var users : [User]!
+    var user : User!
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -24,13 +24,19 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         TwitterClient.sharedInstance.homeTimeline(success: { (tweets : [Tweet])
             in
             self.tweets = tweets
-            
+            TwitterClient.sharedInstance.currentAccount(success: { (user : User)
+                in
+                self.user = user
+                self.tableView.reloadData()
+            }) { (error) in
+                print(error.localizedDescription)
+            }
             
             for tweet in tweets {
                 print(tweet.text!)
                 print(tweet.favouriteCount)
                 print(tweet.retweetCount)
-                print(tweet.followingName)
+                //print(tweet.followingName ?? 0)
                 
                
             }
